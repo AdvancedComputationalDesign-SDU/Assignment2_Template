@@ -92,6 +92,12 @@ This approach creates a self-similar pattern characteristic of fractals, where e
 |---|---|---:|---:|---:|---:|---|---|---|
 | 1 | ... | ... | ... | ... | ... | ... | 42 | ... |
 
+Record every figure’s parameter set and SEED. You may also print a small run dictionary for traceability:
+```python
+RUN = dict(seed=SEED, depth=DEPTH, angle=ANGLE, scale=S, influences=['attractor','obstacle'])
+print('Run:', RUN)
+```
+
 ---
 
 ## Appearance Mapping

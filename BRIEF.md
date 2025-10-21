@@ -27,7 +27,7 @@ While the branching or growth approach can be inspired by L-systems, it does not
 
 ### Learning goals
 
-- Design and implement an recursive generator (e.g., L-system or direct branching) and geometric interpretation pipeline.
+- Design and implement a recursive generator (e.g., L-system or direct branching) and geometric interpretation pipeline.
 - Combine **symbolic rules** with **spatial reasoning** (distance, intersection, fields).
 - Practice recursion, parameterization, and reproducible randomness.
 - Communicate methodology and results clearly.
@@ -49,8 +49,12 @@ While the branching or growth approach can be inspired by L-systems, it does not
      - **Length Scaling Factor**: How the length of lines changes with each recursion.
      - **Recursion Depth**: The number of times the recursive function calls itself.
    - Allow customization of these parameters to enable exploration of different fractal patterns.
-   - Incorporate randomness to increase visual complexity, and use a fixed seed for reproducibility (e.g., 
-  `import random; random.seed(42)`). Record the seed with each run.
+   - Incorporate randomness to increase visual complexity, and use a fixed seed for reproducibility:
+    
+      ```python
+      import random
+      random.seed(42)  # set and record this per output
+      ```
 
 2. **Geometric Influences**
 
@@ -74,18 +78,18 @@ While the branching or growth approach can be inspired by L-systems, it does not
    - Use Matplotlib to plot your fractal patterns.
    - Map visual appearance attributes such as color and stroke thickness to meaningful signals like recursion depth, curvature, or distance to attractors.
    - Enhance your visualizations with custom color schemes or gradients to improve interpretability and aesthetics.
-   - When saving, export only the generated image (not the entire figure). Hide axes and margins and save tightly, e.g.:
+   - When saving, export a clean, tight image (not a full UI figure): hide axes/margins and save tightly.
   
-     ```python
-     import matplotlib.pyplot as plt
-     fig, ax = plt.subplots()
-     # ... draw your geometry on ax ...
-     ax.set_aspect('equal', adjustable='box')
-     ax.axis('off')
-     plt.margins(0)
-     plt.savefig('images/output.png', bbox_inches='tight', pad_inches=0, dpi=300)
-     plt.close(fig)
-     ```
+      ```python
+      import matplotlib.pyplot as plt
+      fig, ax = plt.subplots()
+      # ... draw your geometry on ax ...
+      ax.set_aspect('equal', adjustable='box')
+      ax.axis('off')
+      plt.margins(0)
+      plt.savefig('images/output.png', bbox_inches='tight', pad_inches=0, dpi=300)
+      plt.close(fig)
+      ```
 
 5. **Experiments**
 
@@ -237,19 +241,6 @@ Requirements highlight: generate **four** distinct outputs, use randomness with 
   - Use color maps to apply gradients along the lines.
   - Consider using libraries like `matplotlib.colors` for advanced color manipulations.
 
-### Modify Geometric Rules
-
-- **Incorporate Randomness**:
-  - Introduce randomness in angles or lengths to create more natural-looking patterns.
-  - Example:
-
-    ```python
-    import random
-
-    angle_change = random.uniform(20, 40)
-    length_scaling = random.uniform(0.6, 0.8)
-    ```
-
 ### Advanced Base Cases for Recursion
 
 - Explore alternative termination conditions beyond fixed recursion depth, such as:
@@ -266,7 +257,6 @@ Requirements highlight: generate **four** distinct outputs, use randomness with 
   - Your `fractal_generator.py` script and any additional scripts.
   - Completed `README.md` with pseudo-code, explanations, and short report (copied from your `TEMPLATE.md` draft).
   - Generated images saved in the `images/` folder.
-  - Any additional documentation in the `docs/` folder.
 
 - **Submission Checklist**:
   - [ ] Code runs without errors.
@@ -289,7 +279,10 @@ Requirements highlight: generate **four** distinct outputs, use randomness with 
 - **Geometric Influences**
   - Quality, correctness, and meaningful integration of at least two spatial influences.
   - Demonstrated understanding of how spatial rules modulate growth.
-  - Effective and informative use of color and stroke thickness mapped to recursion depth, curvature, or distance to attractors.
+
+- **Visualization**
+  - Clear, informative mapping of color/line width/opacity to signals (depth, curvature, distance to features).
+  - Legible composition and export (axes off, tight bounds).
 
 - **Documentation**
   - Detailed pseudo-code and technical explanations.
@@ -326,4 +319,4 @@ Requirements highlight: generate **four** distinct outputs, use randomness with 
 
 If you have any questions or need assistance, please reach out to the instructor via email or the course forum.
 
----</file>
+---
