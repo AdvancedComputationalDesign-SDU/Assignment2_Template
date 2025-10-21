@@ -1,5 +1,7 @@
 # Assignment 2: Fractal Generation Documentation
 
+> Use this as the structure for your write-up. While developing, document here; **before submitting, copy the completed content into `README.md`.**
+
 ## Table of Contents
 
 - [Pseudo-Code](#pseudo-code)
