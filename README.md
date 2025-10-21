@@ -17,14 +17,13 @@ This repository contains the starter materials for **Assignment 2: Exploring Fra
 Assignment2/
 ├── README.md                 ← your project documentation (this file)
 ├── BRIEF.md                  ← assignment specification (DO NOT EDIT)
-├── TEMPLATE.md               ← write-up structure to follow (DO NOT EDIT)
+├── TEMPLATE.md               ← write-up structure to follow (Draft here; copy to README.md before submission)
 ├── fractal_generator.py      ← your code implementation
 └── images/
     ├── fractal1.png
     ├── fractal2.png
     ├── fractal3.png
-    ├── fractal4.png
-    └── fractal5.png
+    └── fractal4.png
 ```
 
 ---

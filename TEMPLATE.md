@@ -6,7 +6,10 @@
 
 - [Pseudo-Code](#pseudo-code)
 - [Technical Explanation](#technical-explanation)
-- [Results](#results)
+- [Geometric Influences](#geometric-influences)
+- [Parameters & Seeds](#parameters--seeds)
+- [Appearance Mapping](#appearance-mapping)
+- [Experiments](#experiments)
 - [Challenges and Solutions](#challenges-and-solutions)
 - [References](#references)
 
@@ -25,7 +28,7 @@ Example:
      - `length`: Length of the current line segment.
      - `depth`: Current recursion depth.
    - **Process**:
-     - **If** `depth` is 0:
+     - **If** `(depth == 0) or (distance_to_goal < ε) or (local_density > τ) or (curvature_budget <= 0)`:
        - **Return** (End recursion).
      - **Else**:
        - Calculate `end_point` using trigonometry:
@@ -44,6 +47,10 @@ Example:
 
 2. **Initialize Parameters**
    - Set `start_point`, `initial_angle`, `initial_length`, `recursion_depth`, `angle_change`, `length_scaling_factor`.
+   - ```python
+     import random
+     random.seed(SEED)  # record SEED in the report
+     ```
 
 3. **Call `generate_fractal` Function**
    - Begin the fractal generation by calling `generate_fractal(start_point, initial_angle, initial_length, recursion_depth)`.
@@ -73,25 +80,32 @@ This approach creates a self-similar pattern characteristic of fractals, where e
 
 ---
 
-## Results
+## Geometric Influences
 
-*(Include images of your generated fractal patterns, and discuss any observations or interesting findings.)*
+*(Describe at least two geometric influences you chose to incorporate, such as attractors/repulsors, fields, region-aware rules, obstacles/clipping, self-avoidance, adaptive recursion, multi-scale scaling. Explain how these influences are computed and where in the recursion or growth process they modulate the fractal growth.)*
 
-Example:
+---
 
-### Fractal Pattern 1: Basic Fractal Tree
+## Parameters & Seeds
 
-![Fractal Tree](images/example.png)
+| Figure | Axiom/Init | Depth | Angle Δ | Length L | Scale s | Influences | Seed | Notes |
+|---|---|---:|---:|---:|---:|---|---|---|
+| 1 | ... | ... | ... | ... | ... | ... | 42 | ... |
 
-- **Parameters**:
-  - `angle_change`: 30°
-  - `length_scaling_factor`: 0.7
-  - `recursion_depth`: 5
-- **Observations**:
-  - The fractal tree exhibits symmetry and balance.
-  - As the recursion depth increases, the level of detail in the branches increases.
+---
 
-*(Repeat for other fractal patterns.)*
+## Appearance Mapping
+
+*(Explain how you map visual properties such as color, line width, or opacity to meaningful signals like recursion depth, curvature, or distance to attractors. Justify your choices and how they enhance the visualization.)*
+
+---
+
+## Experiments
+
+*(Include minimum four distinct outputs, each with parameters and random seed recorded.)*
+
+- Compare runs with the same parameters but different seeds to observe stochastic variation.
+- Discuss sensitivity of the fractal pattern to parameter changes and geometric influences.
 
 ---
 
@@ -106,6 +120,9 @@ Example:
 
 - **Challenge**: Implementing randomness without losing the overall structure.
   - **Solution**: Introduced randomness within controlled bounds for angles and lengths.
+
+- **Challenge**: Ensuring stochastic variation remained reproducible.
+  - **Solution**: Controlled randomness via ranges and fixed `random.seed` per run.
 
 ---
 

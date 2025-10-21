@@ -4,7 +4,9 @@
 
 ## Objective
 
-In this assignment you will implement an **L‑system–based recursive generator** and enrich it with **geometric influences** that shape how the structure grows in space. You will work with geometric primitives (lines, polylines) using **Shapely** and render the results (e.g., with Matplotlib). The core of the assignment is to **couple formal grammar growth with spatial rules** such as attractor/repulsor points, fields, and collision constraints to produce expressive, controllable patterns.
+In this assignment you will implement a **recursive generator** and enrich it with **geometric influences** that shape how the structure grows in space. You will work with geometric primitives (lines, polylines) using **Shapely** and render the results (e.g., with Matplotlib). The core of the assignment is to **couple formal grammar growth with spatial rules** such as attractor/repulsor points, fields, and collision constraints to produce expressive, controllable patterns.
+
+While the branching or growth approach can be inspired by L-systems, it does not have to be strictly L-system based. You are encouraged to explore recursive generation methods influenced by spatial constraints and geometric rules that govern how the fractal develops and interacts with its environment. This opens opportunities to experiment with recursive branching logic, adaptive scaling, and spatial modulation beyond formal grammar rewriting.
 
 ---
 
@@ -25,20 +27,21 @@ In this assignment you will implement an **L‑system–based recursive generato
 
 ### Learning goals
 
-- Design and implement an L‑system expansion and geometric interpretation pipeline.
+- Design and implement an recursive generator (e.g., L-system or direct branching) and geometric interpretation pipeline.
 - Combine **symbolic rules** with **spatial reasoning** (distance, intersection, fields).
 - Practice recursion, parameterization, and reproducible randomness.
 - Communicate methodology and results clearly.
+- Develop awareness of how spatial rules (fields, attractors, obstacles) can modulate recursive growth processes.
 
 ---
 
 ## Tasks
 
-1. **Implement Recursive Geometric Script**
+1. **Implement Recursive Generator**
 
-   - Create a Python script (`fractal_generator.py`) that uses recursive functions to generate fractal patterns based on geometric transformations.
+   - Create a Python script (`fractal_generator.py`) that uses recursive functions to generate fractal patterns. This can be based on L-system–style string rewriting or direct recursive branching logic.
    - Use the **Shapely** library to create and manipulate geometric objects, specifically for drawing lines and polylines.
-   - Define the parameters of your fractal explicitly in your script such as:
+   - Define the parameters of your fractal explicitly in your script. Examples include:
      - **Starting Point**: The initial coordinate from which the pattern generation starts.
      - **Initial Angle**: The starting orientation of the pattern.
      - **Angle Change**: The angle by which the direction changes at each recursive step.
@@ -46,36 +49,56 @@ In this assignment you will implement an **L‑system–based recursive generato
      - **Length Scaling Factor**: How the length of lines changes with each recursion.
      - **Recursion Depth**: The number of times the recursive function calls itself.
    - Allow customization of these parameters to enable exploration of different fractal patterns.
-   - **Optional:** Incorporate random module to achieve greater visual complexity.
+   - Incorporate randomness to increase visual complexity, and use a fixed seed for reproducibility (e.g., 
+  `import random; random.seed(42)`). Record the seed with each run.
 
+2. **Geometric Influences**
 
-2. **Generate Distinct Outputs**
+   - Integrate at least two types of spatial influences into your recursive generator. Examples include:
+     - Attractors and Repulsors: Points or regions that pull or push growth directions.
+     - Fields: Scalar or vector fields influencing direction or length.
+     - Region-Aware Rules: Growth constrained within or outside specific areas.
+     - Obstacles/Clipping: Preventing intersections or pruning branches.
+     - Self-Avoidance: Avoiding self-intersections or overlap.
+     - Adaptive Recursion: Modulating recursion depth or branching based on spatial context.
+   - These influences should meaningfully affect the fractal's structure and appearance.
 
-   - Use your script to produce at least **five distinctly different fractal patterns** by varying the parameters or the geometric rules.
+3. **Generate Distinct Outputs**
+
+   - Produce at least **four distinctly different fractal patterns** by varying parameters and geometric influences.
    - Save each output as an image in the `images/` folder with descriptive filenames.
+   - Record the parameter sets and random seeds used for each output to ensure reproducibility.
 
-3. **Visualization**
+4. **Visualization and Appearance Mapping**
 
-   - Use appropriate visualization libraries (e.g., Matplotlib) to plot your fractal patterns.
-   - Utilize Shapely's integration with Matplotlib for plotting geometric objects.
-   - **Optional:** Enhance your visualizations with custom color schemes.
-   - Consider line thickness, color gradients, or other visual effects to improve the aesthetic appeal.
+   - Use Matplotlib to plot your fractal patterns.
+   - Map visual appearance attributes such as color and stroke thickness to meaningful signals like recursion depth, curvature, or distance to attractors.
+   - Enhance your visualizations with custom color schemes or gradients to improve interpretability and aesthetics.
+   - When saving, export only the generated image (not the entire figure). Hide axes and margins and save tightly, e.g.:
+  
+     ```python
+     import matplotlib.pyplot as plt
+     fig, ax = plt.subplots()
+     # ... draw your geometry on ax ...
+     ax.set_aspect('equal', adjustable='box')
+     ax.axis('off')
+     plt.margins(0)
+     plt.savefig('images/output.png', bbox_inches='tight', pad_inches=0, dpi=300)
+     plt.close(fig)
+     ```
 
-4. **Explore Advanced Concepts**
+5. **Experiments**
 
-   - **Extend to 3D Space**:
-     - Modify your script to generate fractals in 3D using libraries such as `matplotlib` with `mpl_toolkits.mplot3d` or `plotly`.
-     - Handle 3D coordinates manually or use appropriate interactive 3D visualization libraries.
-   - **Modify Geometric Rules**:
-     - Experiment with different geometric transformations beyond simple branching.
-     - Incorporate randomness or use different geometric shapes.
+   - Systematically explore how different combinations of parameters and geometric influences affect the fractal outcomes.
+   - Document your observations and insights regarding the interplay between recursive growth and spatial modulation.
 
-5. **Documentation**
+6. **Documentation**
 
    - Write detailed pseudo-code explaining your recursive functions in `README.md` using a similar structure to the template provided in `TEMPLATE.md`.
-   - Provide technical explanations of your algorithms.
+   - Provide technical explanations of your algorithms and geometric influences.
    - Include a short report discussing the process and the mathematical principles behind the fractals you created.
    - Insert images of your generated fractals into the documentation.
+   - Discuss challenges faced and how you addressed them.
 
 ---
 
@@ -93,6 +116,13 @@ For 3D visualization or advanced features, you may also need:
 - **mpl_toolkits.mplot3d** (comes with Matplotlib)
 - **Plotly** (for interactive 3D plots)
 
+### Suggested Structure
+
+- Maintain state variables such as position, heading (angle), current length, and scaling factor.
+- Use a branching stack to manage recursive calls and return points.
+- Employ Shapely for geometric operations like line creation, intersection tests, attractor distance calculations, and containment queries.
+- Structure your code to cleanly separate recursion logic, spatial influence computations, and visualization.
+
 ## Repository Structure
 
 ```
@@ -106,16 +136,10 @@ Assignment2/
 │   ├── fractal2.png
 │   ├── fractal3.png
 │   ├── fractal4.png
-│   ├── fractal5.png
 │   └── (Additional images)
 ```
 
-- `BRIEF.md`: This file, containing an overview and instructions.
-- `TEMPLATE.md`: Minimal documentation template for your project repository.
-- `README.md`: Your pseudo-code, technical explanations, and short report.
-- `code/`: Python script for fractal generation.
-- `images/`: Directory to save your generated images.
-- `docs/`: Additional documentation or resources.
+Requirements highlight: generate **four** distinct outputs, use randomness with a fixed seed recorded for reproducibility, and save only the generated image (tight layout, axes off).
 
 ---
 
@@ -130,65 +154,37 @@ Assignment2/
    - Ensure all dependencies are installed.
    - Familiarize yourself with the repository structure.
 
-3. **Implement the Geometric Recursive Script with Shapely**
+3. **Implement the Recursive Generator**
 
    - Open `fractal_generator.py`.
-   - **Define the Parameters** explicitly in your script:
-     - **Starting Point** (`tuple`): The initial coordinate (e.g., `(0, 0)`).
-     - **Initial Angle** (`float`): The starting orientation in degrees (e.g., `90` for upwards).
-     - **Angle Change** (`float`): The angle by which the direction changes at each recursive step (e.g., `25` degrees).
-     - **Length** (`float`): The initial length of the lines drawn.
-     - **Length Scaling Factor** (`float`): The factor by which the line length decreases with each recursion (e.g., `0.7`).
-     - **Recursion Depth** (`int`): The maximum depth of recursion.
-   - **Implement the Recursive Function**:
-     - Write a function that:
-       - Draws a line segment from the current point in the current direction.
-       - Updates the current position based on the length and angle.
-       - Recursively calls itself to create branches.
-     - Use geometric transformations to calculate new positions and orientations.
-     - Use **Shapely** to create and manage line geometries.
-   - **Visualization with Matplotlib**:
-     - Use Matplotlib to plot the Shapely geometric objects.
-     - Ensure the axes are properly set to display the fractal correctly.
+   - Define parameters explicitly: starting point, initial angle, angle change, length, length scaling factor, recursion depth.
+   - Implement recursive branching logic that creates line segments and updates position and orientation.
+   - Use Shapely for geometric operations.
+   - Implement at least two geometric influences from the list provided (e.g., attractors, obstacles, fields).
+   - Map visual appearance attributes (color, stroke thickness) to meaningful signals such as recursion depth or distance to attractors.
 
-4. **Customize Parameters**
+4. **Generate and Save Outputs**
 
-   - Allow users to customize the parameters.
-   - Provide examples of different parameter sets in your script or in separate configuration sections.
-   - Encourage exploration by making it easy to adjust parameters.
+   - Run your script with different parameter sets and geometric influences to generate at least four distinct fractal patterns.
+   - Save each output image in the `images/` folder with descriptive filenames.
+   - Record the parameter sets and random seeds for each output to ensure reproducibility.
 
-5. **Generate and Save Outputs**
+5. **Documentation**
 
-   - Run your script with different parameter sets to generate at least five distinct fractal patterns.
-   - Save each output image in the `images/` folder with descriptive filenames (e.g., `tree_fractal.png`, `spiral_fractal.png`).
+   - Write detailed pseudo-code and explanations in `README.md`.
+   - Describe your recursive functions, geometric influences, and visualization mappings.
+   - Include images of your fractals with commentary.
 
-8. **Advanced Challenges (Optional for Extra Points)**
+6. **Version Control with Git**
 
-   - **Extending to 3D Space**:
-     - Introduce a Z-coordinate and modify your function to handle 3D positions.
-     - Use libraries like `mpl_toolkits.mplot3d` or `plotly` to visualize 3D fractals.
-     - Handle rotations around multiple axes.
-   - **Modify Geometric Rules**:
-     - Incorporate randomness in angles or lengths using random module.
-     - Use different geometric shapes, such as circles or polygons, at recursion steps.
+   - Make regular commits with meaningful messages.
+   - Push your commits to the GitHub repository.
 
-9. **Documentation**
+7. **Review and Finalize**
 
-   - Write detailed pseudo-code explaining your recursive functions in `README.md`.
-   - Introduce parameters, provide technical explanations and discuss the mathematical principles you employed.
-   - Include images and explanations of each of your five fractal outputs.
-   - Discuss any challenges faced and how you overcame them.
-
-10. **Version Control with Git**
-
-    - Make regular commits with meaningful messages.
-    - Push your commits to the GitHub repository.
-
-11. **Review and Finalize**
-
-    - Ensure your code is well-commented and clean.
-    - Verify that all generated images are saved in the correct folder.
-    - Double-check your documentation for clarity and completeness.
+   - Ensure your code is well-commented and clean.
+   - Verify that all generated images are saved correctly.
+   - Double-check your documentation for clarity and completeness.
 
 ---
 
@@ -198,7 +194,7 @@ Assignment2/
 
 - **Implement 3D Fractals**:
   - Introduce a Z-axis and modify your recursive function to handle 3D coordinates.
-  - Adjust your geometric transformations to include rotations around the X, Y, and Z axes.
+  - Adjust geometric transformations to include rotations around X, Y, and Z axes.
   - Handle position and orientation in 3D space.
 
 - **Visualizing in 3D**:
@@ -254,21 +250,31 @@ Assignment2/
     length_scaling = random.uniform(0.6, 0.8)
     ```
 
+### Advanced Base Cases for Recursion
+
+- Explore alternative termination conditions beyond fixed recursion depth, such as:
+  - Proximity to a goal/attractor (terminate when distance < ε).
+  - Local density threshold (terminate when nearby segments exceed a count or length per area).
+  - Curvature/turn-limit based termination (stop when cumulative bend exceeds a budget).
+  - Proximity to obstacles or boundaries (terminate or reroute when within a buffer).
+
 ---
 
 ## Submission Guidelines
 
 - **What to Submit**:
-  - Your `fractal_generator.py` script and any additional scripts in the `code/` directory.
-  - Completed `README.md` with pseudo-code, explanations, and short report.
+  - Your `fractal_generator.py` script and any additional scripts.
+  - Completed `README.md` with pseudo-code, explanations, and short report (copied from your `TEMPLATE.md` draft).
   - Generated images saved in the `images/` folder.
   - Any additional documentation in the `docs/` folder.
 
 - **Submission Checklist**:
   - [ ] Code runs without errors.
-  - [ ] Code is well-commented and follows best practices (e.g. consistent naming conventions).
+  - [ ] Code is well-commented and follows best practices (e.g., consistent naming conventions).
+  - [ ] At least two geometric influences are implemented and explained.
+  - [ ] Appearance mapping (color, stroke thickness) is linked to meaningful signals.
+  - [ ] At least four distinct fractal images are saved, with parameter sets and random seeds recorded for reproducibility.
   - [ ] `README.md` is complete and thorough.
-  - [ ] At least five distinct fractal images are saved and referenced in your documentation.
   - [ ] All changes are committed with meaningful messages.
   - [ ] All commits are pushed to your GitHub repository.
 
@@ -280,22 +286,28 @@ Assignment2/
   - Correct use of recursion in generating fractal patterns using geometric transformations with Shapely.
   - Ability to customize parameters and generate different outputs.
 
-- **Technical Understanding**
-  - Demonstrated understanding of recursion, functional programming, and geometric manipulations.
-  - Clear explanations in code comments and documentation.
-
-- **Code Quality**
-  - Clean, readable, and well-organized code.
-  - Use of meaningful variable names and proper formatting.
+- **Geometric Influences**
+  - Quality, correctness, and meaningful integration of at least two spatial influences.
+  - Demonstrated understanding of how spatial rules modulate growth.
+  - Effective and informative use of color and stroke thickness mapped to recursion depth, curvature, or distance to attractors.
 
 - **Documentation**
   - Detailed pseudo-code and technical explanations.
-  - Short report discussing the process, parameters, and mathematical principles.
-  - Inclusion and discussion of generated fractal images.
+  - Clear discussion of algorithms, parameters, and geometric influences. Feel free to include diagrams to explain your geometric rules.
+  - Inclusion and analysis of generated fractal images.
+
+- **Variety and Control**
+  - Ability to produce diverse fractal outputs through parameter and influence variation.
+  - Reproducibility ensured by recording parameters and random seeds.
 
 - **Use of Git and Version Control**
   - Regular commits with meaningful messages.
   - Proper repository structure and organization.
+
+- **Bonus**
+  - Explore advanced challenges:
+    - Extension to 3D fractals.
+    - Animated fractal generation or interactive visualizations.
 
 ---
 
@@ -314,4 +326,4 @@ Assignment2/
 
 If you have any questions or need assistance, please reach out to the instructor via email or the course forum.
 
----
+---</file>
