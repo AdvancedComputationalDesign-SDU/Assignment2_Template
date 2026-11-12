@@ -1,0 +1,2 @@
+# Additional dependency for the existing acd environment.
+shapely==2.0.7

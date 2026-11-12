@@ -1,87 +1,148 @@
+"""Assignment 2: Recursive Spatial Systems with Shapely.
+
+This is a function scaffold, not a completed recursive generator.
+TODO: design the baseline, stopping and branching rules in generate_fractal(),
+then implement two spatial influences in growth_rule() and/or accept_segment().
+Setup, endpoint calculation, seeded run creation and drawing are supplied.
+
+Coordinates are planar (x, y), headings are degrees counterclockwise from +x,
+and depth counts upward: max_depth=0 includes the root segment.
+Each record contains a Shapely LineString and its recursion depth.
 """
-Assignment 2: Fractal Generator
 
-Author: Your Name
-
-Description:
-This script generates fractal patterns using recursive functions and geometric transformations.
-"""
-
-# Import necessary libraries
+from pathlib import Path
+import json
 import math
-import matplotlib.pyplot as plt
-from shapely.geometry import LineString
-from shapely.affinity import rotate, translate
 import random
 
-# Global list to store all line segments
-line_list = []
+import matplotlib.pyplot as plt
+from shapely.affinity import rotate, translate
+from shapely.geometry import LineString, Point
 
-def generate_fractal(start_point, angle, length, depth, max_depth, angle_change, length_scaling_factor):
+
+def growth_rule(start_point, angle, length, depth, params, scene):
+    """Return (angle, length) after reading the local environment.
+
+    Inputs: start_point (XY), angle (degrees), length (units), depth (integer),
+    params (your settings) and scene (your named Shapely reference geometries).
+    Return: two finite numbers. If unused, return (angle, length) unchanged.
+
+    TODO: Choose a spatial query and how its result changes growth.
+    You may implement either or both influences here or use accept_segment().
     """
-    Recursive function to generate fractal patterns.
+    raise NotImplementedError("TODO: return the heading and length after your spatial response.")
 
-    Parameters:
-    - start_point: Tuple (x, y), starting coordinate.
-    - angle: Float, current angle in degrees.
-    - length: Float, length of the current line segment.
-    - depth: Int, current recursion depth.
-    - max_depth: Int, maximum recursion depth.
-    - angle_change: Float, angle change at each recursion.
-    - length_scaling_factor: Float, scaling factor for the length.
+
+def accept_segment(candidate, depth, params, scene):
+    """Return True to keep this candidate segment.
+
+    Inputs: candidate (LineString), depth (integer), params (your settings)
+    and scene (your named Shapely reference geometries).
+    Return: a Boolean. If unused, explicitly return True.
+
+    TODO: Decide whether a spatial rule should accept or reject the candidate.
+    Explain what rejection means for subsequent growth in your generator.
     """
-    if depth > max_depth:
-        return
+    raise NotImplementedError("TODO: return whether the candidate is accepted.")
 
-    # Calculate the end point of the line segment
-    end_x = start_point[0] + length * math.cos(math.radians(angle))
-    end_y = start_point[1] + length * math.sin(math.radians(angle))
-    end_point = (end_x, end_y)
 
-    # Create a line segment using Shapely
-    line = LineString([start_point, end_point])
-    line_list.append(line)
+def endpoint(start_point, angle, length):
+    """Return an XY tuple using Shapely rotation and translation (degrees)."""
+    step = rotate(Point(length, 0), angle, origin=(0, 0))
+    return translate(step, xoff=start_point[0], yoff=start_point[1]).coords[0]
 
-    # Update the length for the next recursion
-    new_length = length * length_scaling_factor
 
-    # Increment depth
-    next_depth = depth + 1
+def generate_fractal(start_point, angle, length, depth, params, scene, rng):
+    """Return a NEW list of generated segment/depth records.
 
-    # Recursive calls for branches
-    generate_fractal(end_point, angle + angle_change, new_length, next_depth, max_depth, angle_change, length_scaling_factor)
-    generate_fractal(end_point, angle - angle_change, new_length, next_depth, max_depth, angle_change, length_scaling_factor)
+    Inputs
+    ------
+    start_point : XY coordinate tuple
+    angle : heading in degrees counterclockwise from +x
+    length : current nominal segment length
+    depth : current level, starting at 0; max_depth is inclusive
+    params : settings dictionary, including your rule/influence controls
+    scene : dictionary of reference Shapely geometry
+    rng : local random.Random instance, shared within this run
 
-# Main execution
-if __name__ == "__main__":
-    # Parameters
-    start_point = (0, 0)
-    initial_angle = 90
-    initial_length = 100
-    recursion_depth = 0
-    max_recursion_depth = 5
-    angle_change = 30
-    length_scaling_factor = 0.7
+    Return
+    ------
+    list of dicts: {"geometry": a Shapely LineString, "depth": an integer}
+    Return [] when this call produces no accepted geometry.
 
-    # Clear the line list
-    line_list.clear()
+    TODO: Design your baseline, stopping conditions, branching and state transfer.
+    Connect two distinguishable spatial influences with independent on/off controls.
+    Do not draw here or use a shared global output list.
+    """
+    raise NotImplementedError("TODO: implement your baseline, stopping and branching rules.")
 
-    # Generate the fractal
-    generate_fractal(start_point, initial_angle, initial_length, recursion_depth, max_recursion_depth, angle_change, length_scaling_factor)
 
-    # Visualization
-    fig, ax = plt.subplots()
-    for line in line_list:
-        x, y = line.xy
-        ax.plot(x, y, color='green', linewidth=1)
+def build_design(params, scene):
+    """Start a fresh reproducible run; importing this file does not run it."""
+    if type(params["max_depth"]) is not int or not 0 <= params["max_depth"] <= 10:
+        raise ValueError("Use integer max_depth from 0 to 10 (start small).")
+    if not all(math.isfinite(params[key]) for key in ("angle", "length")):
+        raise ValueError("Initial angle and length must be finite.")
+    if len(params["start_point"]) != 2 or not all(
+            math.isfinite(value) for value in params["start_point"]):
+        raise ValueError("start_point must contain two finite coordinates.")
+    if params["length"] <= 0:
+        raise ValueError("Use a positive initial length.")
+    rng = random.Random(params["seed"])
+    return generate_fractal(params["start_point"], params["angle"],
+                            params["length"], 0, params, scene, rng)
 
-    # Optional: Customize the plot
-    ax.set_aspect('equal')
-    plt.axis('off')
+
+def draw_result(ax, records, scene):
+    """Draw segment records on ax; scene holds your references. Return None."""
+    # TODO: Map appearance to a meaningful signal and explain the mapping.
+    for record in records:
+        x, y = record["geometry"].xy
+        ax.plot(x, y, color="#244b43", linewidth=1)
+
+    # TODO: Draw your chosen reference geometries here if useful for interpretation.
+    ax.set_aspect("equal", adjustable="box")
+    ax.axis("off")
+
+
+def main():
+    params = {
+        "start_point": (0.0, 0.0),
+        "angle": 90.0,
+        "length": 40.0,
+        "max_depth": 5,
+        "seed": 26,
+        "influence_a_on": False,
+        "influence_b_on": False,
+        # TODO: Add your generation rules and bounded-randomness settings.
+    }
+    scene = {}  # TODO: Choose and name the Shapely geometries your influences read.
+    try:
+        records = build_design(params, scene)
+    except NotImplementedError as error:
+        print(error)
+        print("Complete the generating TODOs before exporting the four study cases.")
+        return None
+    fig, ax = plt.subplots(figsize=(6, 6))
+    draw_result(ax, records, scene)
+    output_dir = Path(__file__).resolve().parent / "images"
+    output_dir.mkdir(exist_ok=True)
+    # These paths are overwritten on each run. Change both filenames per case,
+    # or rename the exported PNG/JSON pair before running the next comparison.
+    fig.savefig(output_dir / "starter_tree.png", dpi=180,
+                bbox_inches="tight", pad_inches=0.1)
+    metadata = {
+        "parameters": params,
+        "scene_wkt": {name: geometry.wkt for name, geometry in scene.items()},
+        "segments": len(records),
+        "status": "Record your implemented recursive rules and the active influences for this output.",
+    }
+    (output_dir / "starter_tree.json").write_text(
+        json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    print(metadata)
     plt.show()
+    plt.close(fig)
 
-    # Save the figure
-    fig.savefig('images/fractal_tree.png', dpi=300, bbox_inches='tight')
 
-    # Repeat the process with different parameters for additional fractals
-    # ...
+if __name__ == "__main__":
+    main()
